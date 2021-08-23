@@ -6,7 +6,11 @@ const port = 3000;
 app.get("/users", async (req, res) => {
   try {
     const users = await firestore.collection("users").get();
-    const usersData = users.docs.map((userDoc) => userDoc.data());
+    const usersData = users.docs.map((userDoc) => {
+      const user = userDoc.data()
+      delete user.password
+      return user
+    });
     res.status(200).send(usersData);
   } catch (e) {
     res.status(500).send();
@@ -17,8 +21,11 @@ app.get("/users/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const document = await firestore.collection("users").doc(id).get();
+
     if (document.exists) {
-      res.status(200).send(document.data());
+      const userData = document.data();
+      delete userData.password
+      res.status(200).send(userData);
     } else {
       res.status(404).send();
     }
@@ -30,7 +37,7 @@ app.get("/users/:id", async (req, res) => {
 app.delete("/users/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    await firestore.collection("trainingData").doc(id).delete();
+    await firestore.collection("users").doc(id).delete();
     res.status(204).send();
   } catch (e) {
     res.status(500).send("Internal Error, Sorry");
@@ -53,7 +60,8 @@ app.put("/users/:id", async (req, res) => {
     const docId = req.params.id;
     const userData = {
       id: docId,
-      name: req.body.name
+      name: req.body.name,
+      password: req.body.password
     }
     await firestore
       .collection("users")
