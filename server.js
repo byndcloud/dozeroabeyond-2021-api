@@ -6,7 +6,7 @@ const { json, urlencoded } = require("body-parser");
 const { firestore } = require("./firebase");
 const app = express();
 
-const port = 3000;
+const port = process.env.PORT || 8080
 
 // Middlewares
 app.use(json());
@@ -122,6 +122,6 @@ app.post("/users/:id/recover-password", async (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Example app listening at http://0.0.0.0:${port}`);
 });
