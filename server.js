@@ -74,8 +74,8 @@ app.post("/users", async (req, res) => {
   try {
     const docRef = firestore.collection("users").doc();
     const user = { name: req.body.name, id: docRef.id };
-    const document = await firestore.collection("users").add(user);
-    res.status(201).send({ id: document.id });
+    await firestore.collection("users").doc(user).set(user);
+    res.status(201).send({ id: docRef.id });
   } catch (e) {
     console.error(e);
     res.status(500).send("Internal Error, Sorry");
