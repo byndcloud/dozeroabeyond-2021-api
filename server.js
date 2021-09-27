@@ -6,7 +6,7 @@ const { json, urlencoded } = require("body-parser");
 const { firestore } = require("./firebase");
 const app = express();
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8081
 
 // Middlewares
 app.use(json());
