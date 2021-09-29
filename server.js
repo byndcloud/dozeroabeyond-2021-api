@@ -74,7 +74,7 @@ app.post("/users", async (req, res) => {
   try {
     const docRef = firestore.collection("users").doc();
     const user = { name: req.body.name, id: docRef.id };
-    await firestore.collection("users").doc(user).set(user);
+    await docRef.set(user);
     res.status(201).send({ id: docRef.id });
   } catch (e) {
     console.error(e);
